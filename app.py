@@ -1,14 +1,15 @@
-from flask import Flask, request, jsonify
+import gradio as gr
 import whisper
-import os
 
-app = Flask(__name__)
-model = whisper.load_model("base")
+model = whisper.load_model("tiny")
 
-@app.route("/transcribe", methods=["POST"])
-def transcribe():
-    file = request.files['file']
-    file.save("temp.mp3")
-    result = model.transcribe("temp.mp3")
-    os.remove("temp.mp3")
-    return jsonify({"text": result["text"]})
+def transcribe(audio):
+    result = model.transcribe(audio)
+    return result["text"]
+
+gr.Interface(
+    fn=transcribe,
+    inputs=gr.Audio(source="upload", type="filepath"),
+    outputs="text",
+    title="Whisper Speech Transcription"
+).launch()
