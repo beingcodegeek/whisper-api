@@ -1,4 +1,3 @@
-flask
-torch
-gunicorn
+gradio
 git+https://github.com/openai/whisper.git
+torch
